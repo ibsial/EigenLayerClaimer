@@ -143,7 +143,10 @@ async function sendClaimEigenlayerTx(signer: Wallet, proxy: string | undefined):
     return retry(
         async () => {
             let credentials = await getClaimData(signer, proxy)
-            if (!credentials) {
+            console.log(credentials.claimData)
+            await defaultSleep(100)
+            if (!credentials || credentials.claimData == null) {
+                console.log(c.gray(`${signer.address} is not eligible`))
                 return {hash: '', amount: '0'}
             }
             const eigenlayerContract = new Contract(credentials.claimData.contractAddress, credentials.claimData.abi, signer)
@@ -161,7 +164,10 @@ async function sendClaimEigenlayerTx(signer: Wallet, proxy: string | undefined):
             let ethProvider = new JsonRpcProvider(RandomHelpers.getRandomElementFromArray(chains.Ethereum.rpc), new Network('Ethereum', 1), {
                 staticNetwork: true
             })
-            let claimHash = await sendTx(signer.connect(ethProvider), tx, {price: 1.05, limit: RandomHelpers.getRandomNumber({from: 1.05, to: 1.15}, 2)})
+            let claimHash = await sendTx(signer.connect(ethProvider), tx, {
+                price: 1.05,
+                limit: RandomHelpers.getRandomNumber({from: 1.05, to: 1.15}, 2)
+            })
             if (!claimHash) return {hash: '', amount: '0'}
             return {hash: claimHash, amount: formatEther(credentials.claimData.amount)}
         },

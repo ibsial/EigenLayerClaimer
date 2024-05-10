@@ -62,5 +62,5 @@ export declare type CredentialsType = {
         proof: string[]
         amount: string
         signature: string
-    }
+    } | null
 }
