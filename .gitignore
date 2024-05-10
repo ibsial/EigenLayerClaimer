@@ -1,0 +1,10 @@
+node_modules
+build
+typechain
+config.ts
+*.txt
+.env
+
+
+!example.privates.txt
+!example.proxies.txt
