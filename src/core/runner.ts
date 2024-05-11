@@ -8,7 +8,7 @@ import {withdraw} from '../periphery/exchange'
 import {bridgeRelay} from '../periphery/relayBridge'
 import {getChainsWithSufficientBalance} from '../periphery/utils'
 import {telegram} from '../periphery/telegram'
-import {sendClaimEigenlayerTx} from './eigenlayer'
+import {getClaimData, sendClaimEigenlayerTx} from './eigenlayer'
 
 async function claimEigenLayer(signer: Wallet, proxy: string | undefined) {
     if (DEV) {
@@ -20,6 +20,11 @@ async function claimEigenLayer(signer: Wallet, proxy: string | undefined) {
     let eigenBalance = await getBalance(signer.connect(ethProvider), signer.address, chains.Ethereum.tokens.EIGEN.address)
     if (eigenBalance > 0n) {
         console.log(c.blue(`${formatEther(eigenBalance)} EIGEN already claimed`))
+        return false
+    }
+    let credentials = await getClaimData(signer, proxy)
+    if (!credentials || credentials.claimData == null) {
+        console.log(c.gray(`${signer.address} is not eligible`))
         return false
     }
     let needWithdraw = true

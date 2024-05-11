@@ -143,8 +143,6 @@ async function sendClaimEigenlayerTx(signer: Wallet, proxy: string | undefined):
     return retry(
         async () => {
             let credentials = await getClaimData(signer, proxy)
-            console.log(credentials.claimData)
-            await defaultSleep(100)
             if (!credentials || credentials.claimData == null) {
                 console.log(c.gray(`${signer.address} is not eligible`))
                 return {hash: '', amount: '0'}
@@ -175,4 +173,4 @@ async function sendClaimEigenlayerTx(signer: Wallet, proxy: string | undefined):
     )
 }
 
-export {sendClaimEigenlayerTx}
+export {getClaimData, sendClaimEigenlayerTx}
