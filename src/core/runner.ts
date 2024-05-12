@@ -56,7 +56,7 @@ async function claimEigenLayer(signer: Wallet, proxy: string | undefined) {
             console.log(c.yellow(`found enough native in ${targetChain}`))
         }
 
-        if ((ethBalance * 95n) / 100n >= leastToWithdraw + parseEther(Config.toLeave['Ethereum'].to.toString())) {
+        if ((ethBalance * 95n) / 100n >= leastToWithdraw) {
             needWithdraw = false
             needBridge = false
         }
